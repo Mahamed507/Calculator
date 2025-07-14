@@ -1,0 +1,95 @@
+org 100        
+
+       input           / input for x
+       store x
+       input           / input for op
+       store op
+       input           / input for y
+       store y
+		
+
+
+        load op   / <--- load that into the ac- depending on what your op is for the value
+        subt plus
+        SkipCond 400         
+        jump checkMinus      / <---- if op is subt, then jump to the "check_minus"
+// solving for addition
+        load x   
+        add y
+        store answer  / <--- gives me the value 
+        jump done / <--- if done it will jump to "done" and it will output the result
+
+/ checking for subtraction
+checkMinus, load op        /<--- load that into the ac 
+        subt minus      / subt the 45
+        SkipCond 400   / ac = 0
+        jump checkMult    / <--- if this is mult, it will jump to the other one
+
+        load x   /---- does the calulation for subt
+        subt y
+        store answer / store in the result of the answer
+        jump done  / jumps to "done" , and it outputs  the result
+
+/ checking if op is mult 
+checkMult, load op
+        subt mult    // --- op[42] - 42 = 0
+        SkipCond 400 // ac = 0
+        jump multLoop
+
+
+       load y  
+        SkipCond 800 / ac > 0
+        jump negY
+
+        load y
+        store count         / mult using repeated addition 
+        load x
+        store temp
+        load zero
+        store answer
+        jump multLoop
+
+negY,  clear
+        subt y
+        store count
+        load x
+        store temp
+        load zero
+        store answer
+
+multLoop, load count
+          add y
+          SkipCond 400
+		   add x                /<--- this only works for perfect square numbers like, 4*4 , 5*5 and ect. could not figure this out.
+		  store temp
+		  add x
+		  
+		 jump doneMult
+
+doneMult, jump done
+        jump negate
+
+
+
+done,  output             / output the result
+        halt
+
+
+negate, clear
+        subt answer
+        store answer
+        jump done
+
+
+x,dec 0
+y,dec 0
+op,dec 0
+answer,dec 0        / <--------- this is all the varaibles 
+count,dec 0
+temp,dec 0
+zero,dec 0
+one,dec 1
+negone,dec -1
+plus,dec 43
+minus,dec 45
+mult,dec 42
